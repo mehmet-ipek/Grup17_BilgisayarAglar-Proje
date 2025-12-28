@@ -1,7 +1,7 @@
 # QoS Odaklı Çok Amaçlı Rotalama için Meta-Sezgisel ve Pekiştirmeli Öğrenme Yaklaşımları
 
 ## 📌 Proje Özeti
-**Ders:** BSM307 -  Bilgisayar AglarıS (Güz 2025)
+**Ders:** BSM307 -  Bilgisayar Agları (Güz 2025)
 
 Bu proje, **250 düğümlü (node)** ve karmaşık bağlantılara sahip rastgele oluşturulmuş bir ağ topolojisi üzerinde, kaynak (S) ile hedef (D) arasında **en optimum** yolu bulmayı amaçlayan bir optimizasyon çalışmasıdır.
 
@@ -158,4 +158,5 @@ altında test edilmiştir.
 - Toplam maliyet (Total Cost)
 - Çalışma süresi (Runtime)
 - Yol uzunluğu (Hop sayısı)
+
 
