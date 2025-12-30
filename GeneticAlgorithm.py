@@ -820,6 +820,9 @@ ayrıştırılmıştır.
         acc = 0.0
 # Kümülatif skor (accumulator)
 # Bu değişken, skorları soldan sağa toplayarak ilerler
+#Bu değişkenin sebebi, "Rulet Tekerleği Seçimi" (Roulette Wheel Selection)
+#mantığını kodlayabilmek için sınır çizgilerini belirlemektir.
+#Bunu en basit haliyle "Uç Uca Ekleme" mantığıyla açıklayabiliriz.
 
         for p, s in zip(pop, scores):
 # pop  → bireyler (path'ler)
@@ -1568,6 +1571,7 @@ ayrıştırılmıştır.
 # NESİL DÖNGÜSÜ
 # -------------------------------------------------
 # GA, belirlenen nesil sayısı kadar çalışır
+#amaç popülasyondaki kopyaları yakalamak
 
         counts = {}
         for p in population:
@@ -1579,6 +1583,7 @@ ayrıştırılmıştır.
     # counts sözlüğü:
     # - Her path'in popülasyonda kaç kez tekrarlandığını tutar
     # - Fitness sharing için kullanılır
+    #ordaki +1 elimdeki path
     
 
         fit_vals = [shared_fitness(p, counts, share_strength=0.15) for p in population]
