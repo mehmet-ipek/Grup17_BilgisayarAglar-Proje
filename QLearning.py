@@ -8,16 +8,6 @@ from Network import load_graph_and_demands
 def between_2_node_cost(G, S, u, v, w):
     """
     İki düğüm arasındaki maliyeti hesaplar.
-
-    Parametreler:
-        G (networkx.Graph): Ağ grafiği
-        S (int)           : Kaynak düğüm (source)
-        u (int)           : Başlangıç düğümü
-        v (int)           : Hedef düğümü
-        w (tuple)         : (delay ağırlığı, reliability ağırlığı, resource cost ağırlığı)
-
-    Returns:
-        float: u → v kenarının toplam maliyeti
     """
     
     d = G.edges[u, v]['delay'] #gecikme
@@ -30,16 +20,6 @@ def between_2_node_cost(G, S, u, v, w):
 def epsilon_greedy(Q, state, actions, epsilon, rnd):
     """
     Epsilon-greedy stratejisi ile bir eylem seçer.
-
-    Parametreler:
-        Q (ndarray)        : Q tablosu
-        state (int)        : Mevcut düğüm
-        actions (list)     : Mevcut durumdan yapılabilecek eylemler (komşu düğümler)
-        epsilon (float)    : Exploration olasılığı (0–1)
-        rnd (random.Random): Rastgele sayı üretici
-
-    Returns:
-        int: Seçilen eylem (komşu düğüm)
     """
     
     if rnd.random() < epsilon:
@@ -50,34 +30,15 @@ def epsilon_greedy(Q, state, actions, epsilon, rnd):
 def q_learning_path(G, S, D, w=(1/3,1/3,1/3), demand=0.0, episodes=800, alpha=0.2, gamma=0.95,
                     epsilon=0.2, seed=42):
     """
-    Q-learning ile Source → Destination arasındaki en düşük maliyetli yolu bulur.
+    Q-learning ile Source -> Destination arasındaki en düşük maliyetli yolu bulur.
     
-        - Her adımda u→v geçiş maliyeti hesaplanır
+        - Her adımda u->v geçiş maliyeti hesaplanır
         - Ajan epsilon-greedy ile komşulardan birini seçer
-        - Q tablosu klasik güncelleme formülü ile güncellenir
+        - Q tablosu, güncelleme formülü ile güncellenir
         - Hedefe ulaşan yollara ek ödül verilir
-
-    Parametreler:
-        G (networkx.Graph): Ağ grafiği
-        S (int)           : Kaynak node
-        D (int)           : Hedef node
-        w (tuple)         : Delay / reliability / resource cost ağırlıkları
-        demand (float)    : Minimum bandwidth gereksinimi
-        episodes (int)    : Eğitim tekrar sayısı
-        alpha (float)     : Learning rate
-        gamma (float)     : Discount rate
-        epsilon (float)   : Exploration oranı
-        seed (int)        : Rastgelelik için seed
-
-    Returns:
-        (best_path, metrics, Q)
-            best_path (list): bulunan en iyi yol
-            metrics (tuple): (delay, reliability_cost, resource_cost)
-            Q (ndarray): final Q tablosu
     """
 
     rnd = random.Random(seed)
-    episode_costs = []
     best_path, best_cost = None, float('inf')
     
     n = len(G.nodes()) #Düğüm sayısı
@@ -146,26 +107,11 @@ def q_learning_path(G, S, D, w=(1/3,1/3,1/3), demand=0.0, episodes=800, alpha=0.
                 Q[path[-2], path[-1]] = Q[path[-2], path[-1]] + destination_reward # hedefe ulaşan yollara ödül ver
                 d, rc, res = path_metrics(G, path)
                 c = total_cost(d, rc, res, w) # topplam maliyeti hesapla
-                episode_costs.append(c)
                 if c < best_cost:
                     best_cost, best_path = c, path # en düşük maliyetli yolu ve onun maliyetini tut
     
     # En iyi yol bulunduysa döndür
     if best_path and len(best_path) > 1:
-        if __name__ =="__main__":# bulunan en iyi yoldun edgelerinin bandwithlerinden en düşüğünü yazdır
-            min_bandwidth = min(G.edges[best_path[i], best_path[i+1]]['bandwidth'] 
-                                for i in range(len(best_path)-1))
-            print("Best path minimum bandwidth:", min_bandwidth)
-            # Her episode da bulduğu yolun maliyet grafiği
-            import matplotlib.pyplot as plt
-            plt.figure(figsize=(10,4))
-            plt.plot(episode_costs)
-            plt.title("Episode Başına Cost")
-            plt.xlabel("Episode")
-            plt.ylabel("Cost")
-            plt.grid(True)
-            plt.show()
-                
         return best_path, path_metrics(G, best_path), Q
     else:# Yol bulunamadıysa source ve destination arasında sonsuz döndür
         return [S, D], (float('inf'), float('inf'), float('inf')), Q
@@ -183,7 +129,10 @@ if __name__ == "__main__":
     end_time = time.time()#bitiş zamanı
     runtime = end_time - start_time # çalışma süresi
     #sonuçları yazdır
-    print(f"Best path: {best_path}")
-    print(f"Delay: {metrics[0]} ms\tReliablity cost: {metrics[1]}\tResource cost: {metrics[2]}")
-    print(f"Total Cost: {totalCost}")
+    if totalCost == float('inf'):
+        print("Yol bulunamadı!")
+    else:
+        print(f"Best path: {best_path}")
+        print(f"Delay: {metrics[0]} ms\tReliablity cost: {metrics[1]}\tResource cost: {metrics[2]}")
+        print(f"Total Cost: {totalCost}")
     print(f"Runtime: {runtime:.4f} seconds")
