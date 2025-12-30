@@ -115,7 +115,8 @@ def aco_find_path(G, S, D, w=(1/3, 1/3, 1/3), demand = 0.0, ants = 40, iters = 4
                     eta = 1.0 / (c + 1e-6) # 0'a bölme hatasını önlemek için epsilon eklenir.
 
                     # Olasılık Payı Hesabı: (Feromon^alpha) * (Heuristic^beta)
-                    desirabilities.append((t * alpha) * (eta * beta))
+                    desirabilities.append((t ** alpha) * (eta ** beta))
+
                     candidates.append(n)
 
                 # Eğer gidecek uygun bir komşu yoksa (Dead-end), karınca bu turu iptal eder.
